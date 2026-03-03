@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">Ledger</span>
+      </div>
+      <div class="header-month" id="currentMonth"></div>
+    </div>
+  </header>
+
+  <!-- Summary Cards -->
+  <section class="summary-section">
+    <div class="container">
+      <div class="cards-grid">
+        <div class="card card--balance">
+          <div class="card-label">Balance</div>
+          <div class="card-amount" id="balanceAmount">₹0.00</div>
+          <div class="card-sub">Remaining this month</div>
+        </div>
+        <div class="card card--income">
+          <div class="card-label">Income</div>
+          <div class="card-amount" id="incomeAmount">₹0.00</div>
+          <div class="card-sub">Total earned</div>
+        </div>
+        <div class="card card--expense">
+          <div class="card-label">Expenses</div>
+          <div class="card-amount" id="expenseAmount">₹0.00</div>
+          <div class="card-sub">Total spent</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="layout">
+
+        <!-- Left: Add Transaction + Chart -->
+        <div class="left-col">
+
+          <!-- Add Transaction Form -->
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Add Transaction</h2>
+              <!-- Toggle -->
+              <div class="toggle-group">
+                <button class="toggle-btn active" id="btnIncome" onclick="switchType('income')">Income</button>
+                <button class="toggle-btn" id="btnExpense" onclick="switchType('expense')">Expense</button>
+              </div>
+            </div>
+
+            <form id="transactionForm" class="form">
+              <!-- Income fields -->
+              <div class="field-group" id="incomeFields">
+                <div class="field">
+                  <label>Description</label>
+                  <input type="text" id="incomeDesc" placeholder="e.g. Monthly salary" />
+                </div>
+              </div>
+
+              <!-- Expense fields -->
+              <div class="field-group hidden" id="expenseFields">
+                <div class="field">
+                  <label>Expense Name</label>
+                  <input type="text" id="expenseName" placeholder="e.g. Grocery run" />
+                </div>
+                <div class="field">
+                  <label>Category</label>
+                  <select id="expenseCategory">
+                    <option value="">Select category</option>
+                    <option value="Food">🍔 Food</option>
+                    <option value="Transport">🚗 Transport</option>
+                    <option value="Shopping">🛍️ Shopping</option>
+                    <option value="Bills">💡 Bills</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Other">📦 Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Common fields -->
+              <div class="field-row">
+                <div class="field">
+                  <label>Amount (₹)</label>
+                  <input type="number" id="amount" placeholder="0.00" min="0" step="0.01" />
+                </div>
+                <div class="field">
+                  <label>Date</label>
+                  <input type="date" id="txDate" />
+                </div>
+              </div>
+
+              <button type="submit" class="btn-add">
+                <span>+</span> Add Transaction
+              </button>
+            </form>
+          </div>
+
+          <!-- Chart Panel -->
+          <div class="panel" id="chartPanel">
+            <div class="panel-header">
+              <h2 class="panel-title">Spending by Category</h2>
+              <span class="panel-badge" id="chartMonth"></span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="expenseChart"></canvas>
+            </div>
+            <div class="chart-legend" id="chartLegend"></div>
+            <div class="no-chart-msg" id="noChartMsg">No expense data yet.</div>
+          </div>
+
+        </div>
+
+        <!-- Right: Transaction List -->
+        <div class="right-col">
+          <div class="panel transactions-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Transactions</h2>
+              <div class="filter-row">
+                <select id="filterMonth" onchange="renderTransactions()">
+                  <option value="all">All Time</option>
+                </select>
+                <button class="btn-clear" onclick="confirmClearAll()">Clear All</button>
+              </div>
+            </div>
+            <div id="transactionList" class="tx-list">
+              <div class="empty-state" id="emptyState">
+                <div class="empty-icon">✦</div>
+                <p>No transactions yet.<br/>Start by adding one!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
